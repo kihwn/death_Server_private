@@ -15,9 +15,10 @@ function addAnswer(e) {
     success : onSuccess,
   });
 }
-
+//서버 응답 성공시 호출.
 function onSuccess(json, status){
   var answerTemplate = $("#answerTemplate").html();
+  //
   var template = answerTemplate.format(json.writer, new Date(json.createdDate), json.contents, json.answerId, json.answerId);
   $(".qna-comment-slipp-articles").prepend(template);
 }
@@ -50,6 +51,7 @@ function deleteAnswer(e) {
   });
 }
 
+//감사합니다 ..! 덕분에 동적 html 쉽게 생성
 String.prototype.format = function() {
   var args = arguments;
   return this.replace(/{(\d+)}/g, function(match, number) {

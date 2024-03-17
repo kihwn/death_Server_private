@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ModelAndView {
-    //뷰를 포함한 모델 데이터 추상화 담당
+    //뷰를 포함한 모델 데이터 추상화 담당. 원하는 데이터만 뷰에 전달할 수 있도록!
     private View view;
     private Map<String, Object> model = new HashMap<>();
 

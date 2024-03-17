@@ -7,22 +7,27 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import core.jdbc.DataAccessException;
+import core.mvc.AbstractController;
 import core.mvc.Controller;
+import core.mvc.ModelAndView;
 import next.dao.AnswerDao;
 import next.model.Result;
 
-public class DeleteAnswerController implements Controller {
+public class DeleteAnswerController extends AbstractController {
+    private AnswerDao answerDao = new AnswerDao();
+
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+    //String 반환  -> ModelAndView 활용
+    public ModelAndView execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
         Long answerId = Long.parseLong(req.getParameter("answerId"));
-        AnswerDao answerDao = new AnswerDao();
-
-        answerDao.delete(answerId);
-
-        ObjectMapper mapper = new ObjectMapper();
-        resp.setContentType("application/json;charset=UTF-8");
-        PrintWriter out = resp.getWriter();
-        out.print(mapper.writeValueAsString(Result.ok()));
-        return null;
+        ModelAndView mav = jsonView();
+        try {
+            answerDao.delete(answerId);
+            mav.addObject("result", Result.ok());
+        } catch (DataAccessException e) {
+            mav.addObject("result", Result.fail(e.getMessage()));
+        }
+        return mav;
     }
 }
